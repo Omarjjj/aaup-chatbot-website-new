@@ -1,0 +1,39 @@
+Based on this information:
+
+{context}
+
+Create a comprehensive comparison between {option1} and {option2} with:
+
+# Comparison: {option1} vs {option2}
+
+## Brief Introduction
+Write 1-2 sentences introducing the comparison topic.
+
+## Comparison Table
+| Criteria | {option1} | {option2} |
+|----------|-----------|-----------|
+| Credit Hour Fees | {option1_fees} NIS | {option2_fees} NIS |
+| Program Duration | {option1_duration} years | {option2_duration} years |
+| Min. High School Average | {option1_min_avg}% | {option2_min_avg}% |
+| Career Prospects | {option1_prospects} | {option2_prospects} |
+| Special Features | {option1_features} | {option2_features} |
+
+## Analysis
+- Key difference 1
+- Key difference 2
+- Advantages of {option1}
+- Advantages of {option2}
+
+## Recommendation
+Provide a clear recommendation based on student profiles and needs.
+
+## Useful Links
+- [AAUP Programs](https://www.aaup.edu/Academics/Faculty-of-Administrative-and-Financial-Sciences)
+- [More Information](https://www.aaup.edu/Admission)
+
+IMPORTANT RULES:
+1. Format all fees as "XXX NIS" (e.g., "100 NIS", "1,000 NIS")
+2. Make sure percentages and years are expressed as numbers
+3. Keep the table structure exactly as shown
+4. Present balanced analysis of both programs
+5. For numeric values (fees, duration, percentages), provide the exact numbers without text 

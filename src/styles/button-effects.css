@@ -1,0 +1,129 @@
+/* Glossy Button Effects */
+
+.glossy-button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.glossy-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60%;
+  background: linear-gradient(to bottom, 
+    rgba(255, 255, 255, 0.9) 0%, 
+    rgba(255, 255, 255, 0.5) 50%, 
+    rgba(255, 255, 255, 0.1) 100%);
+  opacity: 0.6;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.glossy-button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.7),
+    transparent
+  );
+  animation: glossy-shimmer 3s infinite;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Soft blur glow effect */
+.glossy-button:hover {
+  box-shadow: 0 0 20px 5px rgba(248, 113, 113, 0.4) !important;
+  transform: translateY(-3px) scale(1.05);
+  backdrop-filter: blur(15px) !important;
+  background: rgba(255, 255, 255, 0.25) !important;
+}
+
+@keyframes glossy-shimmer {
+  0% {
+    left: -100%;
+  }
+  50% {
+    left: 100%;
+  }
+  100% {
+    left: 200%;
+  }
+}
+
+.glossy-button:hover::after {
+  animation-duration: 1.5s;
+}
+
+/* Create a frost-like appearance that works with the transparent theme */
+.frost-effect {
+  position: relative;
+  overflow: hidden;
+  animation: softGlow 3s infinite ease-in-out;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.frost-effect::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at center, 
+    rgba(255, 255, 255, 0.5) 0%, 
+    rgba(255, 255, 255, 0.1) 60%
+  );
+  border-radius: inherit;
+  z-index: 0;
+}
+
+/* Paper plane icon styling */
+.paper-plane-icon {
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 0 4px rgba(248, 113, 113, 0.6));
+}
+
+.paper-plane-icon path {
+  fill: #f87171;
+  stroke: none;
+}
+
+/* Button pressed state animation for the plane */
+.send-button:active .paper-plane-icon {
+  animation: sendAnimation 0.5s forwards ease-out;
+  filter: drop-shadow(0 0 6px rgba(248, 113, 113, 0.8));
+}
+
+[dir="rtl"] .send-button:active .paper-plane-icon {
+  animation: rtlSendAnimation 0.5s forwards ease-out;
+  filter: drop-shadow(0 0 6px rgba(248, 113, 113, 0.8));
+}
+
+/* Create animation trails for the paper plane */
+.paper-plane-icon::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -10px;
+  width: 20px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(248, 113, 113, 0.8), transparent);
+  border-radius: 4px;
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.send-button:hover .paper-plane-icon::after {
+  opacity: 0.9;
+} 
