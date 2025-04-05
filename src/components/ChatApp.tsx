@@ -1,5 +1,5 @@
 // ChatApp Component - With HMR Support
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useChatStore, ChatHistory } from '../store/chatStore';
 import { chatService } from '../services/api';
 import { TypewriterEffect } from './TypewriterEffect';
@@ -10,10 +10,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { v4 as uuidv4 } from 'uuid';
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import TopicVisualization from './TopicVisualization';
 import { ConversationContext } from '../types/chat';
 import { Link } from 'react-router-dom';
-import { ContextDebugPanel } from './ContextDebugPanel';
 import { typoCorrectionService, CorrectionSuggestion } from '../services/typoCorrectionService';
 import TypeCorrection from './TypeCorrection';
 import NewChatButton from './NewChatButton';
@@ -181,17 +179,7 @@ interface Message {
   metadata?: Record<string, any>;
 }
 
-interface ChatResponse {
-  response: string;
-  conversationId: string;
-  contextId: string | null;
-  metadata?: Record<string, any>;
-  matches?: Array<{
-    text: string;
-    confidence: number;
-    source: string;
-  }>;
-}
+
 
 interface ChatStore {
   messages: Message[];
