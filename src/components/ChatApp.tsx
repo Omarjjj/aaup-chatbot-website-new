@@ -1,5 +1,5 @@
 // ChatApp Component - With HMR Support
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState,  } from 'react';
 import { useChatStore, ChatHistory } from '../store/chatStore';
 import { chatService } from '../services/api';
 import { TypewriterEffect } from './TypewriterEffect';
@@ -179,7 +179,17 @@ interface Message {
   metadata?: Record<string, any>;
 }
 
-
+interface ChatResponse {
+  response: string;
+  conversationId: string;
+  contextId: string | null;
+  metadata?: Record<string, any>;
+  matches?: Array<{
+    text: string;
+    confidence: number;
+    source: string;
+  }>;
+}
 
 interface ChatStore {
   messages: Message[];
@@ -1160,30 +1170,6 @@ export const ChatApp: React.FC = () => {
                       />
                     </motion.div>
 
-                    {/* Interactive particles on hover */}
-                    <motion.div
-                      
-                    >
-                      {[...Array(6)].map((_, i) => (
-                        <motion.div
-                          key={`particle-${i}`}
-                          className="absolute w-1 h-1 bg-red-400 rounded-full"
-                          initial={{ opacity: 0, scale: 0 }}
-                          animate={{
-                            opacity: [0, 1, 0],
-                            scale: [0.5, 1.5, 0.5],
-                            x: [0, (i % 2 ? 20 : -20) * Math.cos(i * 60)],
-                            y: [0, 20 * Math.sin(i * 60)],
-                          }}
-                          transition={{
-                            duration: 2,
-                            repeat: Infinity,
-                            delay: i * 0.2,
-                            ease: "easeInOut",
-                          }}
-                        />
-                      ))}
-                    </motion.div>
                   </motion.div>
                   <motion.div 
                     className={`relative text-lg sm:text-2xl font-bold overflow-hidden
