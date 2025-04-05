@@ -1098,18 +1098,7 @@ export const ChatApp: React.FC = () => {
             {/* Glossy overlay */}
             <div className="absolute inset-0 bg-gradient-to-b from-red-50/80 via-white/60 to-transparent pointer-events-none" />
             
-            {/* Animated shine effect */}
-            <motion.div
-              className="absolute inset-0 opacity-50"
-              animate={{
-                backgroundPosition: ['200% 0', '-200% 0'],
-                transition: { duration: 3, repeat: Infinity, ease: 'linear' }
-              }}
-              style={{
-                background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)',
-                backgroundSize: '200% 100%'
-              }}
-            />
+          
             
             <div className="container mx-auto px-3 sm:px-6 py-2 sm:py-4">
               <div className="flex items-center justify-between relative z-10">
@@ -1127,22 +1116,7 @@ export const ChatApp: React.FC = () => {
                     
                   >
                     
-                    
-                    {/* Rotating border effect */}
-                    <motion.div
-                      style={{
-                        background: 'conic-gradient(from 0deg, transparent, rgba(239, 68, 68, 0.3), transparent)',
-                      }}
-                      animate={{
-                        rotate: [0, 360],
-                      }}
-                      transition={{
-                        duration: 8,
-                        repeat: Infinity,
-                        ease: "linear"
-                      }}
-                    />
-
+                  
                     {/* Logo container with glass effect */}
                     <motion.div
                       className="relative bg-white/80 backdrop-blur-sm rounded-full p-2 shadow-lg
