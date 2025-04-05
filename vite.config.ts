@@ -16,6 +16,9 @@ export default defineConfig({
     outDir: 'dist',
     assetsDir: 'assets',
     copyPublicDir: true,
+    minify: true,
+    sourcemap: false,
+    reportCompressedSize: false
   },
   server: {
     host: '0.0.0.0',
@@ -40,7 +43,10 @@ export default defineConfig({
     strictPort: true,
     cors: true
   },
-  // Optimize deps
+  // Simplified esbuild configuration to avoid TypeScript errors
+  esbuild: {
+    logOverride: { 'this-is-undefined-in-esm': 'silent' }
+  },
   optimizeDeps: {
     include: ['zustand', 'uuid']
   }

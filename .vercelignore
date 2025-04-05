@@ -1,0 +1,6 @@
+*.ts
+*.tsx
+.git
+.env
+node_modules
+tsconfig*.json 
