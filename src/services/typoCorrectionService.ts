@@ -132,7 +132,7 @@ Format your response as JSON with keys: "hasTypos" (boolean), "corrected" (strin
         }
       ],
       temperature: 0.3,
-      max_tokens: language === 'ar' ? 150 : 100, // Allow more tokens for Arabic text
+      max_completion_tokens: language === 'ar' ? 150 : 100, // Allow more tokens for Arabic text
       response_format: { type: "json_object" }
     });
 

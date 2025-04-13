@@ -455,7 +455,7 @@ export class ContextManager {
     for (const [type, pattern] of Object.entries(entityPatterns)) {
       const matches = message.match(pattern) || [];
       matches.forEach(match => {
-        const cleanMatch = match.trim();
+        const cleanMatch = (match as string).trim();
         if (cleanMatch) {
           context.lastEntities.add(cleanMatch);
           context.entities[`${type}_${Date.now()}`] = cleanMatch;

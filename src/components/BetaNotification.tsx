@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { X, Sparkles, AlertCircle } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 // Define the custom event interface
 interface BetaNotificationEvent extends CustomEvent {
@@ -13,6 +14,7 @@ const BetaNotification = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [showBackground, setShowBackground] = useState(false);
+  const { language } = useLanguage();
 
   const dispatchVisibilityEvent = (visible: boolean) => {
     const event = new CustomEvent('betaNotificationChange', {
@@ -117,19 +119,25 @@ const BetaNotification = () => {
                     transition={{ duration: 0.5 }}
                   >
                     <h3 className="font-bold text-3xl bg-gradient-to-r from-red-400 via-red-500 to-red-400 bg-clip-text text-transparent">
-                      النسخة التجريبية للمساعد الذكي AAUP
+                      {language === 'ar' ? 'النسخة التجريبية للمساعد الذكي AAUP' : 'AAUP Smart Assistant Beta'}
                     </h3>
                     <Sparkles className="w-7 h-7 text-red-400" />
                   </motion.div>
                 </div>
 
                 <div className="space-y-4">
-                  <p className="text-red-500/90 text-lg leading-relaxed font-light tracking-wide">
-                    هذه نسخة تجريبية من المساعد الذكي للجامعة، وقد تواجه بعض الأخطاء أثناء استخدامها. سيتم تحسين النظام بشكل مستمر بناءً على تقارير المستخدمين.
+                  <p className="text-red-500/90 text-lg leading-relaxed font-light tracking-wide" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+                    {language === 'ar' 
+                      ? 'هذه نسخة تجريبية من المساعد الذكي للجامعة، وقد تواجه بعض الأخطاء أثناء استخدامها. في هذه النسخة، يفضل ان تسأل المساعد عن موضوع واحد فقط في كل محادثة. إذا أردت تغيير الموضوع، يرجى إنشاء محادثة جديدة. سيتم تحسين هذه الخاصية في التحديثات القادمة القريبة.' 
+                      : 'This is a beta version of the University Smart Assistant, and you may encounter some errors during use. In this version, please ask the assistant about only one topic per conversation. If you want to change the topic, please create a new chat. This feature will be improved in upcoming updates.'}
                   </p>
-                  <div className="flex items-center gap-3 bg-red-100/30 px-4 py-3 rounded-xl border border-red-200/30">
+                  <div className="flex items-center gap-3 bg-red-100/30 px-4 py-3 rounded-xl border border-red-200/30" dir={language === 'ar' ? 'rtl' : 'ltr'}>
                     <AlertCircle className="w-5 h-5 text-red-400" />
-                    <p className="text-red-500/90 text-base">هذه نسخة تجريبية - نحن نعمل على التحسين المستمر بناءً على ملاحظات الطلاب</p>
+                    <p className="text-red-500/90 text-base">
+                      {language === 'ar' 
+                        ? 'هذه نسخة تجريبية - نحن نعمل على التحسين المستمر بناءً على ملاحظات الطلاب' 
+                        : 'This is a beta version - we are continuously improving based on student feedback'}
+                    </p>
                   </div>
                 </div>
               </div>

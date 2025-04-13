@@ -16,6 +16,7 @@ import { typoCorrectionService, CorrectionSuggestion } from '../services/typoCor
 import TypeCorrection from './TypeCorrection';
 import NewChatButton from './NewChatButton';
 import ChatHistorySidebar from './ChatHistorySidebar';
+import MobileNewChatReminder from './MobileNewChatReminder';
 
 // Global styles for text selection and flowing patterns
 const globalStyles = `
@@ -53,6 +54,12 @@ const globalStyles = `
   * {
     scrollbar-width: thin;
     scrollbar-color: rgba(239, 68, 68, 0.5) rgba(239, 68, 68, 0.05);
+  }
+
+  /* Custom spinner animation for RTL support */
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
   }
 
   .flowing-patterns {
@@ -398,6 +405,9 @@ export const ChatApp: React.FC = () => {
 
     setShowSuggestions(false);
     setMessageHasBeenSent(true);
+    
+    // Clear any typo correction suggestions when submitting a message
+    setTypoCorrectionSuggestion(null);
 
     const userMessage = inputValue.trim();
     setInputValue('');
@@ -446,6 +456,19 @@ export const ChatApp: React.FC = () => {
     const [displayText, setDisplayText] = useState('');
     const [animationState, setAnimationState] = useState<'typing' | 'pausing' | 'deleting' | 'complete'>('typing');
     const [prevText, setPrevText] = useState(''); // Store previous text
+    const [isMobile, setIsMobile] = useState(false);
+    
+    // Check if user is on mobile
+    useEffect(() => {
+      setIsMobile(window.innerWidth < 768);
+      
+      const handleResize = () => {
+        setIsMobile(window.innerWidth < 768);
+      };
+      
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    }, []);
     
     // Reset animation when text changes, but only if actually different
     useEffect(() => {
@@ -533,19 +556,20 @@ export const ChatApp: React.FC = () => {
 
     return (
       <div className="typing-container" dir={isRTL ? 'rtl' : 'ltr'}>
-        {/* For RTL (Arabic), cursor goes on the left */}
-        {isRTL && (
+        {/* Only render cursor for non-mobile devices */}
+        {!isMobile && isRTL && (
           <span className="typing-cursor typing-cursor-rtl" style={cursorStyle}></span>
         )}
         
         <span className="typing-text">{displayText}</span>
         
-        {/* For LTR (English), cursor goes on the right */}
-        {!isRTL && (
+        {/* Only render cursor for non-mobile devices */}
+        {!isMobile && !isRTL && (
           <span className="typing-cursor typing-cursor-ltr" style={cursorStyle}></span>
         )}
         
-        {showTypingIndicator && (
+        {/* Only show typing indicator on non-mobile or during active typing */}
+        {showTypingIndicator && !isMobile && (
           <div className="typing-active-indicator">
             <div className="typing-dot"></div>
             <div className="typing-dot"></div>
@@ -1085,6 +1109,9 @@ export const ChatApp: React.FC = () => {
       {/* Chat history sidebar */}
       <ChatHistorySidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       
+      {/* Mobile reminder notification */}
+      <MobileNewChatReminder messageCount={messagesCount} />
+
       <div className="flex flex-col h-full">
         {/* Sophisticated Header */}
         <motion.header
@@ -1466,7 +1493,7 @@ export const ChatApp: React.FC = () => {
             </div>
           )}
 
-          <div className="chat-input-container animation-isolated bg-gradient-to-t from-white via-white/95 to-transparent py-4 sm:py-6 backdrop-blur-2xl fixed bottom-0 left-0 right-0 z-40">
+          <div className="chat-input-container animation-isolated bg-gradient-to-t from-white via-white/95 to-transparent py-4 sm:py-6 backdrop-blur-2xl fixed bottom-0 left-0 right-0 z-[999]">
             {/* TypeCorrection component positioned above the input field */}
             {typoCorrectionSuggestion && (
               <TypeCorrection 
@@ -1491,7 +1518,7 @@ export const ChatApp: React.FC = () => {
                 className="flex-1 px-4 sm:px-8 py-3 sm:py-4 rounded-xl bg-white/80 border-[2px] border-gray-100/50 focus:outline-none focus:border-[#f87171] focus:ring-4 focus:ring-red-200/40 transition-all duration-300 ease-out text-gray-800 placeholder-gray-400 text-base sm:text-lg tracking-wide font-medium"
                 dir={language === 'ar' ? 'rtl' : 'ltr'}
                 disabled={isLoading}
-                style={{ position: 'relative', zIndex: 41 }}
+                style={{ position: 'relative', zIndex: 1000 }}
               />
               <button
                 type="submit"
@@ -1503,26 +1530,40 @@ export const ChatApp: React.FC = () => {
                   boxShadow: '0 10px 25px -3px rgba(196, 30, 58, 0.15), 0 4px 10px -2px rgba(196, 30, 58, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.2) inset',
                   border: '1px solid rgba(255, 255, 255, 0.3)',
                   position: 'relative',
-                  zIndex: 41
+                  zIndex: 1000
                 }}
                 dir={language === 'ar' ? 'rtl' : 'ltr'}
               >
                 <div className="absolute inset-0 rounded-xl overflow-hidden" style={{
                   background: 'radial-gradient(circle at center, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 70%)',
-                  mixBlendMode: 'overlay'
+                  mixBlendMode: 'overlay',
+                  zIndex: 999
                 }}></div>
                 <div className="absolute inset-0 rounded-xl overflow-hidden opacity-50" style={{
                   background: 'linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.4), transparent)',
                   backgroundSize: '200% 200%',
-                  animation: 'shimmer 3s infinite'
+                  animation: 'shimmer 3s infinite',
+                  zIndex: 999
                 }}></div>
-                <span className="relative z-10 flex items-center justify-center text-red-400 font-semibold">
+                <span className="relative z-[1001] flex items-center justify-center text-red-400 font-semibold">
                   {isLoading ? (
                     <span className="flex items-center justify-center">
-                      <svg className="animate-spin h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
+                      {language === 'ar' ? (
+                        // Special loading spinner for Arabic (RTL) to fix rotation issues
+                        <svg className="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" style={{
+                          animation: 'spin 1s linear infinite',
+                          transformOrigin: 'center'
+                        }}>
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                      ) : (
+                        // Original loading spinner for English (LTR)
+                        <svg className="animate-spin h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                      )}
                     </span>
                   ) : (
                     <span className="flex items-center justify-center">
@@ -1542,6 +1583,8 @@ export const ChatApp: React.FC = () => {
                   onSuggestionClick={(suggestion) => {
                     setInputValue(suggestion);
                     setShowSuggestions(false);
+                    // Clear any typo correction suggestions when clicking a suggestion
+                    setTypoCorrectionSuggestion(null);
                     handleSubmit(new Event('submit') as any);
                   }} 
                 />

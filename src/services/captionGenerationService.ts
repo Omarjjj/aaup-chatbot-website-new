@@ -83,7 +83,7 @@ export const captionGenerationService = {
           { role: "user", content: prompt }
         ],
         temperature: 0.3, // Low temperature for more predictable outputs
-        max_tokens: 30 // Limit response length
+        max_completion_tokens: 30 // Limit response length
       });
       
       // Extract and clean up the caption
